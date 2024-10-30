@@ -7,7 +7,24 @@ from tkinter import messagebox as mb
 #from_email = "jadryshnikov.artur@yandex.ru"
 #to_email = "yadryshnikovartour@yandex.ru"
 
+def save():
+    with open("info_email.txt", "w", encoding="utf-8") as file:
+        file.write(f"{from_email_entry.get()}\n")
+        file.write(f"{to_email_entry.get()}\n")
+        file.write(f"{pass_entry.get()}\n")
+
+def load():
+    try:
+        with open("info_email.txt", "r", encoding="utf-8") as file:
+            list_data = file.readlines()
+            from_email_entry.insert(0, list_data[0].strip())
+            to_email_entry.insert(0, list_data[1].strip())
+            pass_entry.insert(0, list_data[2].strip())
+    except FileNotFoundError:
+        pass
+
 def send_message():
+    save()
     password = pass_entry.get()
     from_email = from_email_entry.get()
     to_email = to_email_entry.get()
@@ -60,6 +77,8 @@ text_message = Label(window, text="Введите сообщение: ", font=("
 text_message.grid(row=4, column=0, pady=10)
 message_entry = Text(window, width=30, height=6, font=("Arial", 16))
 message_entry.grid(row=4, column=1, pady=10)
+
+load()
 
 btn = Button(window, text="Отправить", font=("Arial", 16), command=send_message)
 btn.grid(row=5, column=1)
